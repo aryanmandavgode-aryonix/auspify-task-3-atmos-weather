@@ -1,0 +1,22 @@
+{
+  "name": "atmos-weather",
+  "version": "1.0.0",
+  "description": "ATMOS — Weather, in perspective. A premium weather forecasting experience built with plain HTML5, CSS3 and vanilla JavaScript on top of the free Open-Meteo APIs. Zero runtime dependencies, no build step.",
+  "main": "index.html",
+  "scripts": {
+    "start": "npx --yes serve . --no-clipboard",
+    "dev": "npx --yes serve . --no-clipboard"
+  },
+  "keywords": [
+    "weather",
+    "forecast",
+    "open-meteo",
+    "vanilla-javascript",
+    "html5",
+    "css3",
+    "web-app"
+  ],
+  "author": "ATMOS — Task 3, Auspify Technologies Web Development Internship",
+  "license": "MIT",
+  "private": true
+}

@@ -1,0 +1,152 @@
+/* ============================================================
+   ATMOS — responsive.css
+   Layered refinements: large desktop -> laptop -> tablet -> phone
+   ------------------------------------------------------------ */
+
+/* ---------- ≥1024px — editorial divider on the hero ---------- */
+@media (min-width: 1024px) {
+  .hero-copy {
+    border-right: 1px solid var(--border);
+    padding-right: clamp(28px, 4vw, 64px);
+  }
+}
+
+/* ---------- ≤1024px ---------- */
+@media (max-width: 1024px) {
+  .hero-grid {
+    grid-template-columns: minmax(0, 1.15fr) minmax(240px, 0.85fr);
+    gap: clamp(28px, 5vw, 48px);
+  }
+  .hero-scene { max-width: 380px; }
+  .insights-grid { grid-template-columns: repeat(3, 1fr); }
+}
+
+/* ---------- ≤900px ---------- */
+@media (max-width: 900px) {
+  .header-location { display: none; }
+  .header-inner { gap: 12px; }
+
+  .hero-grid {
+    grid-template-columns: 1fr;
+    gap: 8px;
+    padding-top: clamp(36px, 6vh, 56px);
+    padding-bottom: clamp(32px, 5vh, 48px);
+  }
+  .hero-scene { max-width: 360px; margin-inline: auto; }
+  .hero-figure { margin-top: clamp(24px, 4vh, 36px); }
+
+  /* Insights become a single column; the sun module rises to slot 2 */
+  .insights-grid {
+    display: flex;
+    flex-direction: column;
+    background: var(--surface);
+  }
+  .mod + .mod { border-top: 1px solid var(--border); }
+  .mod-wind { order: 1; }
+  .mod-sun { order: 2; }
+  .mod-uv { order: 3; }
+  .mod-hum { order: 4; }
+  .mod-pre { order: 5; }
+  .mod-vis { order: 6; }
+  .mod-clo { order: 7; }
+
+  .daily-row {
+    grid-template-columns: 50px 58px 34px minmax(0, 1fr) 58px 40px minmax(80px, 200px) 40px;
+    gap: 10px;
+  }
+}
+
+/* ---------- ≤768px — search becomes a full sheet ---------- */
+@media (max-width: 767px) {
+  .search-popover {
+    position: fixed;
+    inset: 0;
+    width: auto;
+    border: none;
+    border-radius: 0;
+    display: flex;
+    flex-direction: column;
+    transform: translateY(12px);
+  }
+  .search-popover.open { transform: none; }
+  .search-sheetbar {
+    display: flex;
+    align-items: center; justify-content: space-between;
+    padding: calc(10px + env(safe-area-inset-top, 0px)) 12px 10px 20px;
+    border-bottom: 1px solid var(--border);
+  }
+  .sheet-title {
+    font-size: 12px; font-weight: 700;
+    letter-spacing: 0.18em; text-transform: uppercase;
+    color: var(--text-2);
+  }
+  .sheet-close {
+    width: 40px; height: 40px;
+    display: grid; place-items: center;
+    color: var(--text-2);
+  }
+  .search-kbd { display: none; }
+  .search-body { max-height: none; flex: 1; }
+  .search-note { display: none; }
+  .search-foot { padding: 12px 20px calc(14px + env(safe-area-inset-bottom, 0px)); }
+
+  .hc { width: 64px; }          /* keeps the JS curve cell in sync */
+  .hourly-panel { padding: 14px 6px 8px; }
+
+  .d-cond { display: none; }
+  .daily-row {
+    grid-template-columns: 48px 56px 34px 56px 40px minmax(72px, 1fr) 40px;
+    gap: 10px;
+    min-height: 58px;
+  }
+  .daily-panel { padding: 6px 18px; }
+
+  .section { margin-top: clamp(30px, 6vh, 44px); }
+  .hero-temp-unit { margin-top: 10px; }
+}
+
+/* ---------- ≤560px — phones ---------- */
+@media (max-width: 560px) {
+  .hero-city { font-size: 30px; }
+  .hero-condition { font-size: 17px; }
+  .hero-meta { font-size: 13px; gap: 10px; }
+  .hero-temp-val { font-size: clamp(80px, 21vw, 110px); }
+  .skel-temp { width: 180px; }
+
+  .hero-scene { max-width: 320px; }
+
+  .d-date, .d-precip { display: none; }
+  .daily-row {
+    grid-template-columns: 54px 34px 40px minmax(64px, 1fr) 40px;
+    gap: 12px;
+    min-height: 56px;
+  }
+
+  .mod { padding: 18px 20px; }
+  .mod-body { flex-wrap: wrap; gap: 16px; }
+  .stat-big { font-size: 30px; }
+  .dial { width: 108px; height: 108px; }
+
+  .footer-grid { flex-direction: column; gap: 22px; }
+  .footer-data { text-align: left; }
+  .footer-brand { align-items: flex-start; }
+
+  .unit-toggle button { width: 44px; }
+  .unit-thumb { width: calc(50% - 3px); }
+  .brand-word { letter-spacing: 0.2em; }
+}
+
+/* ---------- ≤400px — small phones ---------- */
+@media (max-width: 400px) {
+  .header-inner { gap: 8px; }
+  .icon-btn { width: 38px; height: 38px; }
+  .hero-kicker { font-size: 11px; }
+  .hero-meta .hl { gap: 9px; }
+}
+
+/* ---------- touch devices ---------- */
+@media (hover: none) {
+  .btn:active { transform: scale(0.98); }
+  .sr-opt:hover { background: transparent; }
+  .sr-opt.active { background: var(--surface-2); }
+}

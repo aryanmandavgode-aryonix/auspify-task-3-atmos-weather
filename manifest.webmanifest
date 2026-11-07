@@ -1,0 +1,39 @@
+{
+  "name": "ATMOS — Weather, in perspective.",
+  "short_name": "ATMOS",
+  "description": "A premium weather forecasting experience: live conditions, a 24-hour outlook and a seven-day forecast, powered by Open-Meteo.",
+  "id": "atmos-weather",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#101114",
+  "theme_color": "#101114",
+  "categories": ["weather", "utilities"],
+  "icons": [
+    {
+      "src": "assets/icons/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "assets/icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "assets/icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "assets/icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ]
+}

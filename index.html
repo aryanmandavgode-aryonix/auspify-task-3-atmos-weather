@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>ATMOS — Weather, in perspective.</title>
+  <meta name="description" content="ATMOS is a modern weather forecasting experience that makes understanding weather conditions intuitive, beautiful and effortless.">
+  <meta name="color-scheme" content="dark light">
+  <meta name="theme-color" id="meta-theme-color" content="#101114">
+  <link rel="icon" type="image/svg+xml" href="assets/icons/favicon.svg">
+  <link rel="apple-touch-icon" href="assets/icons/icon-192.png">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500;600;700&display=swap" rel="stylesheet">
+  <script>
+    /* Apply the stored (or system) theme before first paint. */
+    (function () {
+      try {
+        var t = null;
+        try { t = localStorage.getItem('atmos:theme'); } catch (e) {}
+        if (t !== 'light' && t !== 'dark') {
+          t = window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+        }
+        document.documentElement.dataset.theme = t;
+        var m = document.getElementById('meta-theme-color');
+        if (m) m.setAttribute('content', t === 'light' ? '#F5F5F7' : '#101114');
+      } catch (e) {}
+    })();
+  </script>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/responsive.css">
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <div class="page">
+    <header class="site-header">
+      <div class="header-inner container">
+        <a class="brand" href="./" aria-label="ATMOS — home">
+          <svg class="brand-mark" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+            <path d="M6.1 19.6A10.5 10.5 0 0 0 25.9 19.6"/>
+            <path d="M22.6 13.6A7 7 0 0 0 9.4 13.6"/>
+            <circle cx="16" cy="16" r="3" fill="var(--accent)" stroke="none"/>
+          </svg>
+          <span class="brand-word">ATMOS</span>
+        </a>
+
+        <button class="header-location" id="btn-location" type="button" title="Change location">
+          <span data-ic="pin"></span>
+          <span id="header-location-text">—</span>
+        </button>
+
+        <div class="header-actions">
+          <div class="unit-toggle" role="group" aria-label="Temperature unit">
+            <span class="unit-thumb" id="unit-thumb" data-at="c" aria-hidden="true"></span>
+            <button type="button" id="unit-c" aria-pressed="true">°C</button>
+            <button type="button" id="unit-f" aria-pressed="false">°F</button>
+          </div>
+          <button class="icon-btn" id="btn-theme" type="button" aria-label="Switch to light theme">
+            <span class="theme-sun" data-ic="sun"></span>
+            <span class="theme-moon" data-ic="moon"></span>
+          </button>
+          <button class="icon-btn" id="btn-search" type="button" aria-haspopup="dialog" aria-expanded="false" aria-label="Search cities">
+            <span data-ic="search"></span>
+          </button>
+        </div>
+
+        <div class="search-popover" id="search-popover" role="dialog" aria-modal="false" aria-label="Search cities" hidden>
+          <div class="search-sheetbar">
+            <span class="sheet-title">Search</span>
+            <button class="sheet-close" id="search-close" type="button" aria-label="Close search"><span data-ic="x"></span></button>
+          </div>
+          <div class="search-field">
+            <span data-ic="search"></span>
+            <input id="search-input" type="text" placeholder="Search cities…" autocomplete="off" spellcheck="false" autocapitalize="off" role="combobox" aria-expanded="false" aria-controls="sr-list" aria-autocomplete="list">
+            <button class="search-clear" id="search-clear" type="button" aria-label="Clear search"><span data-ic="x"></span></button>
+            <kbd class="search-kbd">esc</kbd>
+          </div>
+          <div class="search-body" id="search-body"></div>
+          <div class="search-foot">
+            <button class="search-locate" id="search-locate" type="button"><span data-ic="locate"></span>Use my precise location</button>
+            <span class="search-note">Geocoding — Open-Meteo</span>
+          </div>
+        </div>
+
+        <div class="header-progress" id="header-progress" aria-hidden="true"></div>
+      </div>
+    </header>
+
+    <main id="main" class="site-main">
+      <section class="hero" id="hero" aria-labelledby="hero-city">
+        <div class="hero-backdrop" aria-hidden="true">
+          <div class="hero-photo">
+            <img src="assets/images/atmos-clouds.jpg" alt="" loading="eager" decoding="async">
+          </div>
+          <div class="hero-glow"></div>
+        </div>
+        <div class="container hero-grid">
+          <div class="hero-copy" id="hero-copy">
+            <div class="skel skel-line w-32"></div>
+            <div class="skel skel-city"></div>
+            <div class="skel skel-line w-55"></div>
+            <div class="skel skel-temp"></div>
+            <div class="skel skel-line w-40"></div>
+          </div>
+          <div class="hero-scene" id="hero-scene" aria-hidden="true"></div>
+        </div>
+      </section>
+
+      <section class="section section-hourly" id="section-hourly" aria-labelledby="hourly-title">
+        <div class="container">
+          <div class="section-head">
+            <h2 class="section-label" id="hourly-title">Next 24 hours</h2>
+            <span class="section-note">Local time · scroll sideways</span>
+          </div>
+          <div id="hourly-wrap"></div>
+        </div>
+      </section>
+
+      <section class="section section-daily" id="section-daily" aria-labelledby="daily-title">
+        <div class="container">
+          <div class="section-head">
+            <h2 class="section-label" id="daily-title">7-day outlook</h2>
+            <span class="section-note">Bars show each day's range within the week</span>
+          </div>
+          <div id="daily-wrap"></div>
+        </div>
+      </section>
+
+      <section class="section section-insights" id="section-insights" aria-labelledby="insights-title">
+        <div class="container">
+          <div class="section-head">
+            <h2 class="section-label" id="insights-title">Atmospheric detail</h2>
+            <span class="section-note" id="insights-note">—</span>
+          </div>
+          <div class="insights-grid" id="insights-grid"></div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="container footer-grid">
+        <div class="footer-brand">
+          <svg class="footer-mark" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+            <path d="M6.1 19.6A10.5 10.5 0 0 0 25.9 19.6"/>
+            <path d="M22.6 13.6A7 7 0 0 0 9.4 13.6"/>
+            <circle cx="16" cy="16" r="3" fill="currentColor" stroke="none"/>
+          </svg>
+          <div>
+            <p class="footer-tag">Weather, in perspective.</p>
+            <p class="footer-copy">© <span id="year">2025</span> ATMOS · Task 3 — Auspify Technologies Web Development Internship</p>
+          </div>
+        </div>
+        <div class="footer-data">
+          <p><b>Forecast &amp; geocoding</b> — Open-Meteo</p>
+          <p><b>Reverse geocoding</b> — BigDataCloud</p>
+          <p><b>Typeface</b> — Inter</p>
+        </div>
+      </div>
+    </footer>
+  </div>
+
+  <div class="toast-root" id="toast-root" role="status" aria-live="polite"></div>
+  <noscript>
+    <div class="noscript">ATMOS needs JavaScript to fetch live conditions. Please enable it and reload.</div>
+  </noscript>
+
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>
